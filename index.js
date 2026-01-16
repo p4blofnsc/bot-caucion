@@ -137,7 +137,7 @@ function esHorarioDeMercado() {
 
   // Crear objetos de hora para comparar
   const inicio = ahora.clone().hour(10).minute(30).second(0)
-  const fin = ahora.clone().hour(21).minute(30).second(0)
+  const fin = ahora.clone().hour(17).minute(30).second(0)
 
   return ahora.isBetween(inicio, fin, null, '[]') // [] incluye los límites
 }
