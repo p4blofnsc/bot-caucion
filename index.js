@@ -27,5 +27,29 @@ app.get('/api/cauciones', async (req, res) => {
   }
 })
 
+app.get('/run', async (req, res) => {
+  try {
+    const token = req.query.token
+
+    // 401 si falta o no coincide
+    if (!token || token !== process.env.RUN_TOKEN) {
+      return res.sendStatus(401)
+    }
+
+    // 204 si está fuera de horario (no es error)
+    if (!esHorarioDeMercado()) {
+      return res.sendStatus(204)
+    }
+
+    const { oportunidades } = await procesarCauciones()
+    await notificarSiCorresponde(oportunidades)
+
+    return res.sendStatus(200)
+  } catch (e) {
+    return res.status(500).json({ error: e.message })
+  }
+})
+
+
 const PORT = process.env.PORT || 3000
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`))
